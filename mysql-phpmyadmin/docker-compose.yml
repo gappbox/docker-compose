@@ -1,0 +1,34 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    networks:
+      - proxy
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    networks:
+      - proxy
+    depends_on:
+      - mysql
+
+networks:
+  proxy:
+    name: proxy
+    driver: bridge
+
+volumes:
+  mysqldata:
